@@ -1,4 +1,4 @@
-# BrewDai App!
+# BrewDay App!
 
 University Project consisting in a mobile application developed for Android devices through Android Studio.
 
