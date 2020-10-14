@@ -14,6 +14,7 @@ equations = [(M+m)*x_dd + m*L*th_dd*cos(th) - m*L^2*th_d^2*sin(th) == (Ke*v)/(Rr
 % solve equations for the indicated parameters (in this case: [x_dd, th_dd])
 [sol_x_dd, sol_th_dd] = solve(equations, [x_dd, th_dd]);
 
+
 %% Linearization
 %x0 = [0 0 0 0];
 %v0 = 0;
@@ -21,6 +22,7 @@ equations = [(M+m)*x_dd + m*L*th_dd*cos(th) - m*L^2*th_d^2*sin(th) == (Ke*v)/(Rr
 functs=[x_d, sol_x_dd, th_d, sol_th_dd]; % define state functions
 jac = simplify(jacobian(functs, [x; x_d; th; th_d])); % compute jacobians wrt x, x_d, th, th_d
 jac_u = simplify(jacobian(functs, v)); % compute jacobians wrt v
+
 
 %% Model Parameters
 
@@ -43,6 +45,7 @@ v = 0;
 A = subs(jac); % replaces all the variables in the symbolic expression jac with values obtained from the MATLAB workspace
 B = subs(jac_u); % replaces all the variables in the symbolic expression jac_u with values obtained from the MATLAB workspace
 
+
 %% State-space definition
 
 A = double(A);
@@ -63,7 +66,6 @@ elseif (p==-1)
 end
 
 
-
 %% LQR controller
 
 Q = [10 0 0 0; 
@@ -82,7 +84,6 @@ sys = ss((A - B*K), B, C, D);
 co = ctrb(sys); % controllability matrix
 controllability = rank(co); % check rank of controllability matrix
 
-
 t = 0:0.1:7;
 
 [y,t,x] = initial(sys, x0, t);
@@ -90,12 +91,13 @@ t = 0:0.1:7;
 h = 1; % rectangle hight
 w = 2; % rectangle width
 
+
+%% Animation: cart + pendulum
+
 cart_min = min(y(:,1));
 cart_max = max(y(:,1));
 pend_min = min(y(:,2));
 pend_max = max(y(:,2));
-
-%% Animation: cart + pendulum
 
 figure('units','normalized','outerposition',[0.3 0.6 0.4 0.7]) % figure size and position
 
@@ -142,6 +144,7 @@ for k=1:length(t)
     drawnow
     
 end
+
 
 % %% Plot Cart position and Pendulum angle
 
